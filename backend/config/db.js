@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose"); //here use require instead of import because mongoose doesn't support ES6 modules by default
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
@@ -8,3 +8,4 @@ const connectDB = async () => {
     process.exit(1);
   }
 }
+module.exports = connectDB;

@@ -1,6 +1,5 @@
 //here we will crud for todo model
-import Todo from "../models/todo.js";
-
+import Todo from "../models/todo.js"
 // Create a new todo
 export const createTodo = async (req, res) => {
   try {

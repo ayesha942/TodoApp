@@ -31,26 +31,22 @@ export const getTodoById = async (req, res) => {
     }   
 };
 export const updateTodo = async (req, res) => {
-    try {
-        const updateTodo=await Todo.findByIdandUpdate(
-            req.params.id,
-            req.body,
-       
-            { new: true }  
-             );
-        if (!updateTodo){
-            return res.status(404).json({ message: "Todo not found" });
-        }  
-    
-        res.status(200).json(updateTodo);
-    
+  try {
+    const updatedTodo = await Todo.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true } // return updated document instead of old one
+    );
+
+    if (!updatedTodo) {
+      return res.status(404).json({ message: "Todo not found" });
     }
-    
-     catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-    
-}
+
+    res.status(200).json(updatedTodo);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 export const deleteTodo = async (req, res) => {
     try {
         const deleteTodo=await Todo.findByIdAndDelete(req.params.id);

@@ -2,14 +2,14 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import todorouter from "./router/todorouter.js"; 
-
+import cors from "cors";
 import errorHandler from "./middleware/errorMiddleware.js";
 
 dotenv.config();   
 connectDB();
 
 const app = express();
-
+app.use(cors());
 app.use(express.json());
 
 // Routes

@@ -12,13 +12,16 @@
 //   );
 // }
 
+// TodoList.jsx
 import React from "react";
 import TodoItem from "./TodoItem";
 
 export default function TodoList({ todos = [], onUpdate, onDelete }) {
-  // Group todos by date
+  // Group todos by dueDate
   const groupedTodos = todos.reduce((groups, todo) => {
-    const date = todo.date || new Date().toLocaleDateString('en-GB');
+    const date = todo.dueDate
+      ? new Date(todo.dueDate).toLocaleDateString("en-GB")
+      : "No Due Date"; // fallback if no due date
     if (!groups[date]) {
       groups[date] = [];
     }
@@ -30,7 +33,9 @@ export default function TodoList({ todos = [], onUpdate, onDelete }) {
     return (
       <div className="text-center py-16">
         <div className="text-gray-400 text-xl mb-2">No tasks yet</div>
-        <div className="text-gray-500 text-sm">Add your first task above to get started!</div>
+        <div className="text-gray-500 text-sm">
+          Add your first task above to get started!
+        </div>
       </div>
     );
   }
@@ -42,10 +47,10 @@ export default function TodoList({ todos = [], onUpdate, onDelete }) {
           {/* Date Header */}
           <div className="mb-3">
             <span className="inline-block text-red-500 font-medium text-sm">
-              Date: {date}
+              {date}
             </span>
           </div>
-          
+
           {/* Tasks for this date */}
           <div className="space-y-1">
             {todosForDate.map((todo) => (

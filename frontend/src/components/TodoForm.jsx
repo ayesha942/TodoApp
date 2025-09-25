@@ -37,26 +37,30 @@ export default function TodoForm({ onCreate }) {
     setTitle("");
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSubmit(e);
+    }
+  };
+
   return (
-    <div className="mb-8">
-      <form onSubmit={handleSubmit}>
-        <div className="flex gap-3">
-          <input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Add a new task..."
-            className="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-          />
-          <button
-            type="submit"
-            disabled={!title.trim()}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-all duration-200 flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <span className="text-lg">+</span>
-            Add Task
-          </button>
-        </div>
-      </form>
+    <div className="mb-6">
+      <div className="flex gap-3">
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          onKeyPress={handleKeyPress}
+          placeholder="Add new task"
+          className="flex-1 px-4 py-3 bg-gray-100 border-0 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-300 transition-all duration-200"
+        />
+        <button
+          onClick={handleSubmit}
+          disabled={!title.trim()}
+          className="px-6 py-3 bg-red-500 hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-all duration-200"
+        >
+          Add
+        </button>
+      </div>
     </div>
   );
 }

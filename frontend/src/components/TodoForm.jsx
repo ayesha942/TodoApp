@@ -29,11 +29,12 @@ import React, { useState } from "react";
 
 export default function TodoForm({ onCreate }) {
   const [title, setTitle] = useState("");
+  const [dueDate, setDueDate] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!title.trim()) return;
-    onCreate({ title: title.trim() });
+    onCreate({ title: title.trim(),dueDate });
     setTitle("");
   };
 
@@ -53,6 +54,14 @@ export default function TodoForm({ onCreate }) {
           placeholder="Add new task"
           className="flex-1 px-4 py-3 bg-gray-100 border-0 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-300 transition-all duration-200"
         />
+          {/* Due Date Input */}
+        <input
+          type="date"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+          className="px-4 py-3 bg-gray-100 border-0 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-300 transition-all duration-200"
+        />
+
         <button
           onClick={handleSubmit}
           disabled={!title.trim()}

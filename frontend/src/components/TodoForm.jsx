@@ -61,7 +61,11 @@ export default function TodoForm({ onCreate }) {
           onChange={(e) => setDueDate(e.target.value)}
           className="px-4 py-3 bg-gray-100 border-0 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-300 transition-all duration-200"
         />
-
+<select value={priority} onChange={(e) => setPriority(e.target.value)} className="px-4 py-3 bg-gray-100 border-0 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-300 transition-all duration-200">
+  <option value="Low">Low Priority</option>
+  <option value="Medium">Medium Priority</option>
+  <option value="High">High Priority</option>
+</select>
         <button
           onClick={handleSubmit}
           disabled={!title.trim()}

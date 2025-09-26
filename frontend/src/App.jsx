@@ -1,69 +1,4 @@
-// import React, { useEffect, useState } from "react";
-// import TodoForm from "./components/TodoForm";
-// import TodoList from "./components/TodoList";
-// import * as todoService from "./services/todoService";
 
-// export default function App() {
-//   const [todos, setTodos] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   const fetchTodos = async () => {
-//     try {
-//       setLoading(true);
-//       const data = await todoService.getTodos();
-//       setTodos(data);
-//     } catch (err) {
-//       setError(err.message || "Failed to load todos");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchTodos();
-//   }, []);
-
-//   const handleCreate = async (payload) => {
-//     try {
-//       const newTodo = await todoService.createTodo(payload);
-//       setTodos((p) => [newTodo, ...p]);
-//     } catch (err) {
-//       setError(err.message);
-//     }
-//   };
-
-//   const handleUpdate = async (id, updates) => {
-//     try {
-//       const updated = await todoService.updateTodo(id, updates);
-//       setTodos((p) => p.map((t) => (t._id === id ? updated : t)));
-//     } catch (err) {
-//       setError(err.message);
-//     }
-//   };
-
-//   const handleDelete = async (id) => {
-//     try {
-//       await todoService.deleteTodo(id);
-//       setTodos((p) => p.filter((t) => t._id !== id));
-//     } catch (err) {
-//       setError(err.message);
-//     }
-//   };
-
-//   return (
-//     <div style={{ maxWidth: 760, margin: "30px auto", padding: 16 }}>
-//       <h2>Todo App</h2>
-//       <TodoForm onCreate={handleCreate} />
-//       {loading ? (
-//         <p>Loading...</p>
-//       ) : (
-//         <TodoList todos={todos} onUpdate={handleUpdate} onDelete={handleDelete} />
-//       )}
-//       {error && <p style={{ color: "red" }}>{error}</p>}
-//     </div>
-//   );
-// }
 
 import React, { useState, useEffect } from "react";
 import TodoForm from "./components/TodoForm";
@@ -97,18 +32,21 @@ export default function App() {
   }, []);
 
   // Create Todo
-  const onCreate = async (newTodo) => {
-    try {
-      const created = await createTodo({
-        ...newTodo,
-        completed: false,
-        date: new Date().toLocaleDateString("en-GB"), // DD/MM/YYYY
-      });
-      setTodos((prev) => [created, ...prev]);
-    } catch (error) {
-      console.error("Error creating todo:", error);
-    }
-  };
+  // Create Todo
+const onCreate = async (newTodo) => {
+  try {
+    const created = await createTodo({
+      title: newTodo.title,
+      dueDate: newTodo.dueDate,
+      priority: newTodo.priority, // ✅ Pass it properly
+      completed: false,
+    });
+    setTodos((prev) => [created, ...prev]);
+  } catch (error) {
+    console.error("Error creating todo:", error);
+  }
+};
+
 
   // Update Todo
   const onUpdate = async (id, updates) => {

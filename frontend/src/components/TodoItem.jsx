@@ -1,5 +1,4 @@
-
-// TodoItem.jsx
+// TodoItem.jsx - FIXED VERSION
 import React from "react";
 import { Trash2 } from "lucide-react";
 import {
@@ -28,9 +27,19 @@ export default function TodoItem({ todo, onUpdate, onDelete }) {
   // 🎯 Priority color map (MUI Chip colors)
   const priorityColors = {
     High: "error",
-    Medium: "warning",
+    Medium: "warning", 
     Low: "success",
   };
+
+  // ❌ REMOVED THE PROBLEMATIC CODE - This was forcing everything to "Medium"!
+  // const normalizedPriority =
+  //   todo.priority &&
+  //   todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1).toLowerCase();
+
+  // ✅ FIXED: Use the priority directly from the database
+  const displayPriority = todo.priority; // This will be "Low", "Medium", or "High" from your schema
+
+  console.log("Todo priority from database:", todo.priority); // Debug log
 
   return (
     <Card
@@ -77,11 +86,11 @@ export default function TodoItem({ todo, onUpdate, onDelete }) {
             )}
           </Box>
 
-          {/* 🎨 Priority Tag */}
-          {todo.priority && (
+          {/* 🎨 Priority Tag - FIXED */}
+          {displayPriority && (
             <Chip
-              label={todo.priority}
-              color={priorityColors[todo.priority]}
+              label={displayPriority} // ✅ Now shows the actual priority value
+              color={priorityColors[displayPriority] || "default"}
               size="small"
               variant="outlined"
             />

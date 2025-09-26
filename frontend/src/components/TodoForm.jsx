@@ -30,46 +30,60 @@ import React, { useState } from "react";
 export default function TodoForm({ onCreate }) {
   const [title, setTitle] = useState("");
   const [dueDate, setDueDate] = useState("");
+  const [priority, setPriority] = useState("Low"); // default priority
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!title.trim()) return;
-    onCreate({ title: title.trim(),dueDate });
-    setTitle("");
-  };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSubmit(e);
-    }
+    // send new todo to parent
+    onCreate({ 
+      title: title.trim(), 
+      dueDate, 
+      priority 
+    });
+
+    // reset
+    setTitle("");
+    setDueDate("");
+    setPriority("Low");
   };
 
   return (
     <div className="mb-6">
       <div className="flex gap-3">
+        {/* Title input */}
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          onKeyPress={handleKeyPress}
           placeholder="Add new task"
-          className="flex-1 px-4 py-3 bg-gray-100 border-0 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-300 transition-all duration-200"
+          className="flex-1 px-4 py-3 bg-gray-100 border-0 rounded-lg text-gray-700"
         />
-          {/* Due Date Input */}
+
+        {/* Due date */}
         <input
           type="date"
           value={dueDate}
           onChange={(e) => setDueDate(e.target.value)}
-          className="px-4 py-3 bg-gray-100 border-0 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-300 transition-all duration-200"
+          className="px-4 py-3 bg-gray-100 border-0 rounded-lg text-gray-700"
         />
-<select value={priority} onChange={(e) => setPriority(e.target.value)} className="px-4 py-3 bg-gray-100 border-0 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-300 transition-all duration-200">
-  <option value="Low">Low Priority</option>
-  <option value="Medium">Medium Priority</option>
-  <option value="High">High Priority</option>
-</select>
+
+        {/* Priority */}
+        <select
+          value={priority}
+          onChange={(e) => setPriority(e.target.value)}
+          className="px-4 py-3 bg-gray-100 border-0 rounded-lg text-gray-700"
+        >
+          <option value="Low">Low Priority</option>
+          <option value="Medium">Medium Priority</option>
+          <option value="High">High Priority</option>
+        </select>
+
+        {/* Add button */}
         <button
           onClick={handleSubmit}
           disabled={!title.trim()}
-          className="px-6 py-3 bg-red-500 hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-all duration-200"
+          className="px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg"
         >
           Add
         </button>

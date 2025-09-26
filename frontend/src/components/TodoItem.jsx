@@ -45,23 +45,32 @@ export default function TodoItem({ todo, onUpdate, onDelete }) {
   const isOverdue =
     todo.dueDate && new Date(todo.dueDate) < new Date() && !todo.completed;
 
+  // 🎯 Priority color map
+  const priorityColors = {
+    High: "bg-red-100 text-red-600 border border-red-300",
+    Medium: "bg-yellow-100 text-yellow-700 border border-yellow-300",
+    Low: "bg-green-100 text-green-600 border border-green-300",
+  };
+
   return (
-    <div className="flex items-center gap-3 py-2 px-3 bg-gray-50 rounded-lg mb-2 group hover:bg-gray-100 transition-all duration-200">
+    <div className="flex items-center gap-4 py-3 px-4 bg-white rounded-xl shadow-sm mb-3 border border-gray-100 hover:shadow-md transition-all duration-200">
+      {/* ✅ Checkbox */}
       <button
         onClick={toggle}
-        className={`flex-shrink-0 w-5 h-5 rounded-full border-2 transition-all duration-200 flex items-center justify-center ${
+        className={`flex-shrink-0 w-6 h-6 rounded-full border-2 transition-all flex items-center justify-center ${
           todo.completed
-            ? "bg-red-400 border-red-400 text-white"
-            : "border-gray-300 hover:border-red-300"
+            ? "bg-green-500 border-green-500 text-white"
+            : "border-gray-300 hover:border-green-400"
         }`}
       >
-        {todo.completed && <span className="text-xs">✓</span>}
+        {todo.completed && <span className="text-sm font-bold">✓</span>}
       </button>
 
+      {/* 📌 Title + Due Date */}
       <div className="flex-1 min-w-0">
         <div
-          className={`font-medium transition-all duration-200 ${
-            todo.completed ? "text-gray-400 line-through" : "text-gray-700"
+          className={`font-medium text-base break-words ${
+            todo.completed ? "text-gray-400 line-through" : "text-gray-800"
           }`}
         >
           {todo.title}
@@ -69,20 +78,30 @@ export default function TodoItem({ todo, onUpdate, onDelete }) {
 
         {todo.dueDate && (
           <div
-            className={`text-xs ${
-              isOverdue ? "text-red-500 font-semibold" : "text-gray-400"
+            className={`text-xs mt-1 ${
+              isOverdue ? "text-red-500 font-semibold" : "text-gray-500"
             }`}
           >
-            Due: {new Date(todo.dueDate).toLocaleDateString("en-GB")}
+            📅 Due: {new Date(todo.dueDate).toLocaleDateString("en-GB")}
           </div>
         )}
       </div>
 
+      {/* 🎨 Priority Tag */}
+      {todo.priority && (
+        <span
+          className={`text-xs px-2 py-1 rounded-full font-medium ${priorityColors[todo.priority]}`}
+        >
+          {todo.priority}
+        </span>
+      )}
+
+      {/* 🗑️ Delete Button */}
       <button
         onClick={remove}
-        className="flex-shrink-0 p-1 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-200"
+        className="flex-shrink-0 p-2 text-gray-400 hover:text-red-500 transition-all duration-200"
       >
-        <Trash2 size={16} />
+        <Trash2 size={18} />
       </button>
     </div>
   );

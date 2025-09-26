@@ -1,14 +1,15 @@
 import Todo from "../models/todo.js";
 
 // Create a new todo
+// controller/todocontroller.js
 export const createTodo = async (req, res) => {
   try {
-    const { title, dueDate, createdBy } = req.body; 
+    const { title, dueDate, priority, createdBy } = req.body;  // ✅ priority add
 
-    // Create new Todo with dueDate
     const newTodo = new Todo({
       title,
-      dueDate: dueDate ? new Date(dueDate) : null, // safely handle
+      dueDate: dueDate ? new Date(dueDate) : null,
+      priority, // ✅ yaha set karo
       createdBy,
     });
 
@@ -44,13 +45,12 @@ export const getTodoById = async (req, res) => {
 
 // Update todo
 export const updateTodo = async (req, res) => {
-  try {
-    const { title, dueDate, completed } = req.body;
-
+   try {
+    const { title, dueDate, completed, priority } = req.body; // ✅ priority add
     const updatedTodo = await Todo.findByIdAndUpdate(
       req.params.id,
-      { title, dueDate, completed },
-      { new: true } // return updated doc
+      { title, dueDate, completed, priority }, // ✅ priority update allowed
+      { new: true }
     );
 
     if (!updatedTodo) {

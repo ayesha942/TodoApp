@@ -18,7 +18,7 @@ const todoSchema = new mongoose.Schema(
     {
       type: String,
       enum: ['Low', 'Medium', 'High'],
-      default: 'Medium',
+     required:true,
     },
     createdBy: {
       type: String, 

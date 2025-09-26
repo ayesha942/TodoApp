@@ -77,6 +77,7 @@ import {
 import "./App.css";
 
 export default function App() {
+  
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -132,6 +133,7 @@ export default function App() {
   };
 
   return (
+    
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-md mx-auto px-4">
         {/* Header */}
@@ -141,7 +143,9 @@ export default function App() {
             <div className="text-2xl">📋</div>
           </div>
         </div>
-
+ <div className="bg-blue-500 text-white p-6 rounded-lg text-xl">
+      ✅ Tailwind Fixed and Working!
+    </div>
         {/* Main Container */}
         <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
           <TodoForm onCreate={onCreate} />

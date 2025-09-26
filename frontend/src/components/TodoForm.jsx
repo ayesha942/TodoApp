@@ -24,23 +24,32 @@
 //     </form>
 //   );
 // }
-
 import React, { useState } from "react";
+import {
+  TextField,
+  Button,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  Grid,
+  Paper,
+  Box,
+} from "@mui/material";
 
 export default function TodoForm({ onCreate }) {
   const [title, setTitle] = useState("");
   const [dueDate, setDueDate] = useState("");
-  const [priority, setPriority] = useState("Low"); // default priority
+  const [priority, setPriority] = useState("Low");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!title.trim()) return;
 
-    // send new todo to parent
-    onCreate({ 
-      title: title.trim(), 
-      dueDate, 
-      priority 
+    onCreate({
+      title: title.trim(),
+      dueDate,
+      priority,
     });
 
     // reset
@@ -50,44 +59,69 @@ export default function TodoForm({ onCreate }) {
   };
 
   return (
-    <div className="mb-6">
-      <div className="flex gap-3">
-        {/* Title input */}
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Add new task"
-          className="flex-1 px-4 py-3 bg-gray-100 border-0 rounded-lg text-gray-700"
-        />
+    <Paper elevation={3} sx={{ p: 3, mb: 4, borderRadius: 2 }}>
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        noValidate
+        autoComplete="off"
+      >
+        <Grid container spacing={2} alignItems="center">
+          {/* Title input */}
+          <Grid item xs={12} sm={4}>
+            <TextField
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Add new task"
+              variant="outlined"
+              fullWidth
+              label="Task"
+            />
+          </Grid>
 
-        {/* Due date */}
-        <input
-          type="date"
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
-          className="px-4 py-3 bg-gray-100 border-0 rounded-lg text-gray-700"
-        />
+          {/* Due date */}
+          <Grid item xs={12} sm={3}>
+            <TextField
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+              label="Due Date"
+              InputLabelProps={{ shrink: true }}
+              fullWidth
+            />
+          </Grid>
 
-        {/* Priority */}
-        <select
-          value={priority}
-          onChange={(e) => setPriority(e.target.value)}
-          className="px-4 py-3 bg-gray-100 border-0 rounded-lg text-gray-700"
-        >
-          <option value="Low">Low Priority</option>
-          <option value="Medium">Medium Priority</option>
-          <option value="High">High Priority</option>
-        </select>
+          {/* Priority */}
+          <Grid item xs={12} sm={3}>
+            <FormControl fullWidth>
+              <InputLabel>Priority</InputLabel>
+              <Select
+                value={priority}
+                onChange={(e) => setPriority(e.target.value)}
+                label="Priority"
+              >
+                <MenuItem value="Low">Low</MenuItem>
+                <MenuItem value="Medium">Medium</MenuItem>
+                <MenuItem value="High">High</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
 
-        {/* Add button */}
-        <button
-          onClick={handleSubmit}
-          disabled={!title.trim()}
-          className="px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg"
-        >
-          Add
-        </button>
-      </div>
-    </div>
+          {/* Add button */}
+          <Grid item xs={12} sm={2}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              disabled={!title.trim()}
+              sx={{ py: 1.4 }}
+            >
+              Add
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
+    </Paper>
   );
 }

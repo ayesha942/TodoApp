@@ -32,6 +32,16 @@
 // TodoItem.jsx
 import React from "react";
 import { Trash2 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  Checkbox,
+  Typography,
+  Chip,
+  IconButton,
+  Stack,
+  Box,
+} from "@mui/material";
 
 export default function TodoItem({ todo, onUpdate, onDelete }) {
   const toggle = () => onUpdate(todo._id, { completed: !todo.completed });
@@ -45,64 +55,74 @@ export default function TodoItem({ todo, onUpdate, onDelete }) {
   const isOverdue =
     todo.dueDate && new Date(todo.dueDate) < new Date() && !todo.completed;
 
-  // 🎯 Priority color map
+  // 🎯 Priority color map (MUI Chip colors)
   const priorityColors = {
-    High: "bg-red-100 text-red-600 border border-red-300",
-    Medium: "bg-yellow-100 text-yellow-700 border border-yellow-300",
-    Low: "bg-green-100 text-green-600 border border-green-300",
+    High: "error",
+    Medium: "warning",
+    Low: "success",
   };
 
   return (
-    <div className="flex items-center gap-4 py-3 px-4 bg-white rounded-xl shadow-sm mb-3 border border-gray-100 hover:shadow-md transition-all duration-200">
-      {/* ✅ Checkbox */}
-      <button
-        onClick={toggle}
-        className={`flex-shrink-0 w-6 h-6 rounded-full border-2 transition-all flex items-center justify-center ${
-          todo.completed
-            ? "bg-green-500 border-green-500 text-white"
-            : "border-gray-300 hover:border-green-400"
-        }`}
-      >
-        {todo.completed && <span className="text-sm font-bold">✓</span>}
-      </button>
+    <Card
+      sx={{
+        mb: 2,
+        boxShadow: 2,
+        borderRadius: 2,
+        "&:hover": { boxShadow: 4 },
+      }}
+    >
+      <CardContent>
+        <Stack direction="row" spacing={2} alignItems="center">
+          {/* ✅ Checkbox */}
+          <Checkbox
+            checked={todo.completed}
+            onChange={toggle}
+            color="success"
+          />
 
-      {/* 📌 Title + Due Date */}
-      <div className="flex-1 min-w-0">
-        <div
-          className={`font-medium text-base break-words ${
-            todo.completed ? "text-gray-400 line-through" : "text-gray-800"
-          }`}
-        >
-          {todo.title}
-        </div>
+          {/* 📌 Title + Due Date */}
+          <Box sx={{ flexGrow: 1 }}>
+            <Typography
+              variant="body1"
+              sx={{
+                textDecoration: todo.completed ? "line-through" : "none",
+                color: todo.completed ? "text.secondary" : "text.primary",
+              }}
+            >
+              {todo.title}
+            </Typography>
 
-        {todo.dueDate && (
-          <div
-            className={`text-xs mt-1 ${
-              isOverdue ? "text-red-500 font-semibold" : "text-gray-500"
-            }`}
-          >
-            📅 Due: {new Date(todo.dueDate).toLocaleDateString("en-GB")}
-          </div>
-        )}
-      </div>
+            {todo.dueDate && (
+              <Typography
+                variant="caption"
+                sx={{
+                  mt: 0.5,
+                  display: "block",
+                  color: isOverdue ? "error.main" : "text.secondary",
+                  fontWeight: isOverdue ? "bold" : "normal",
+                }}
+              >
+                📅 Due: {new Date(todo.dueDate).toLocaleDateString("en-GB")}
+              </Typography>
+            )}
+          </Box>
 
-      {/* 🎨 Priority Tag */}
-      {todo.priority && (
-        <span
-          className={`text-xs px-2 py-1 rounded-full font-medium ${priorityColors[todo.priority]}`}
-        >
-          {todo.priority}
-        </span>
-      )}
+          {/* 🎨 Priority Tag */}
+          {todo.priority && (
+            <Chip
+              label={todo.priority}
+              color={priorityColors[todo.priority]}
+              size="small"
+              variant="outlined"
+            />
+          )}
 
-      {/* 🗑️ Delete Button */}
-      <button
-        onClick={remove}
-        className="flex-shrink-0 p-2 text-gray-400 hover:text-red-500 transition-all duration-200"
-      >
-        <Trash2 size={18} />
-      </button>
-    </div>
+          {/* 🗑️ Delete Button */}
+          <IconButton onClick={remove} color="error">
+            <Trash2 size={20} />
+          </IconButton>
+        </Stack>
+      </CardContent>
+    </Card>
   );
 }

@@ -14,6 +14,12 @@ const todoSchema = new mongoose.Schema(
     dueDate: {
       type: Date,
     },
+    priority:
+    {
+      type: String,
+      enum: ['Low', 'Medium', 'High'],
+      default: 'Medium',
+    },
     createdBy: {
       type: String, 
     },

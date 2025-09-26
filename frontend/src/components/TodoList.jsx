@@ -11,52 +11,51 @@
 //     </ul>
 //   );
 // }
-
 import React, { useState } from "react";
 import TodoItem from "./TodoItem";
 
 export default function TodoList({ todos = [], onUpdate, onDelete }) {
-  const [sortBy, setSortBy] = useState("dueDate"); // ✅ keep state at top
+  const [sortBy, setSortBy] = useState("dueDate");
 
-  // 1️⃣ copy todos so we don’t mutate original
   let sortedTodos = [...todos];
 
-  // 2️⃣ apply sorting
   if (sortBy === "dueDate") {
     sortedTodos.sort((a, b) => {
       if (a.dueDate && b.dueDate) {
         return new Date(a.dueDate) - new Date(b.dueDate);
-      } else if (a.dueDate) {
-        return -1;
-      } else if (b.dueDate) {
-        return 1;
-      }
+      } else if (a.dueDate) return -1;
+      else if (b.dueDate) return 1;
       return 0;
     });
   } else if (sortBy === "priority") {
     const priorityOrder = { High: 1, Medium: 2, Low: 3 };
-    sortedTodos.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+    sortedTodos.sort(
+      (a, b) => (priorityOrder[a.priority] || 999) - (priorityOrder[b.priority] || 999)
+    );
   } else if (sortBy === "createdAt") {
     sortedTodos.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }
 
-  // 3️⃣ group by date AFTER sorting
-  const groupedTodos = sortedTodos.reduce((groups, todo) => {
-    const date = todo.dueDate
-      ? new Date(todo.dueDate).toLocaleDateString("en-GB")
-      : "No Due Date";
-    if (!groups[date]) {
-      groups[date] = [];
-    }
-    groups[date].push(todo);
-    return groups;
-  }, {});
+  // ✅ Only group by due date if sorting by due date
+  const groupedTodos =
+    sortBy === "dueDate"
+      ? sortedTodos.reduce((groups, todo) => {
+          const date = todo.dueDate
+            ? new Date(todo.dueDate).toLocaleDateString("en-GB")
+            : "No Due Date";
+          if (!groups[date]) groups[date] = [];
+          groups[date].push(todo);
+          return groups;
+        }, {})
+      : { All: sortedTodos };
 
   if (!todos.length) {
     return (
-      <div className="text-center py-16">
-        <div className="text-gray-400 text-xl mb-2">No tasks yet</div>
-        <div className="text-gray-500 text-sm">
+      <div style={{ textAlign: "center", padding: "2rem" }}>
+        <div style={{ color: "#999", fontSize: "1.2rem", marginBottom: "0.5rem" }}>
+          No tasks yet
+        </div>
+        <div style={{ color: "#bbb", fontSize: "0.9rem" }}>
           Add your first task above to get started!
         </div>
       </div>
@@ -66,11 +65,11 @@ export default function TodoList({ todos = [], onUpdate, onDelete }) {
   return (
     <div>
       {/* Sorting Dropdown */}
-      <div className="mb-4">
+      <div style={{ marginBottom: "1rem" }}>
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="px-3 py-2 border rounded-md"
+          style={{ padding: "0.5rem", borderRadius: "6px", border: "1px solid #ccc" }}
         >
           <option value="dueDate">Sort by Due Date</option>
           <option value="priority">Sort by Priority</option>
@@ -79,16 +78,14 @@ export default function TodoList({ todos = [], onUpdate, onDelete }) {
       </div>
 
       {Object.entries(groupedTodos).map(([date, todosForDate]) => (
-        <div key={date} className="mb-6">
-          {/* Date Header */}
-          <div className="mb-3">
-            <span className="inline-block text-red-500 font-medium text-sm">
+        <div key={date} style={{ marginBottom: "1.5rem" }}>
+          {sortBy === "dueDate" && (
+            <div style={{ marginBottom: "0.5rem", color: "#d32f2f", fontWeight: 500 }}>
               {date}
-            </span>
-          </div>
+            </div>
+          )}
 
-          {/* Tasks for this date */}
-          <div className="space-y-1">
+          <div>
             {todosForDate.map((todo) => (
               <TodoItem
                 key={todo._id}
